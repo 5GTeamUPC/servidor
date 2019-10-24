@@ -65,8 +65,7 @@ class server:
         self.server_socket.bind(("localhost", 1234))   # bind() --> per associar un socket a la direcció d'un servidor. host: IP port: 1234
         self.server_socket.listen(10)  # Ens posem en mode escoltar (escoltem les connexions entrants dels clients!)
         #print("[#] Servidor creat!")
-        #afegim a la llista de sockets el server_socket
-        self.LLISTA_SOCKS.append(self.server_socket)
+        self.LLISTA_SOCKS.append(self.server_socket) #afegim a la llista de sockets el server_socket
         #print("[#] Servidor afegit a la llista de sockets!!")
         #print(self.LLISTA_SOCKS)
         while 1:
