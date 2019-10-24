@@ -50,3 +50,5 @@ class client():
 		self.client.connect()
 		self.client.thread_receive(self.print) #Quan usuari rebi del servidor la frase, es cridarà al mètode change que canviarà el label
 
+if __name__ == "__main__":
+	main()
