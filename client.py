@@ -44,11 +44,7 @@ class client():
         print(missatge)
         self.timeout=GLib.timeout_add(50, self.on_timeout, None)
         
-    def main():
-        #inicialitzar el client
-		self.client = client()
-		self.client.connect()
-		self.client.thread_receive(self.print) #Quan usuari rebi del servidor la frase, es cridarà al mètode change que canviarà el label
-
 if __name__ == "__main__":
-	main()
+	self.client = client()
+	self.client.connect()
+	self.client.thread_receive(self.print) #Quan usuari rebi del servidor la frase, es cridarà al mètode change que canviarà el label
