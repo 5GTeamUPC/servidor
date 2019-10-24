@@ -39,3 +39,14 @@ class client():
         
         temps_total = time.time() - self.t1
         self.client_sock.send(missatge)
+       
+    def print(text):
+        print(missatge)
+        self.timeout=GLib.timeout_add(50, self.on_timeout, None)
+        
+    def main():
+        #inicialitzar el client
+		self.client = client()
+		self.client.connect()
+		self.client.thread_receive(self.print) #Quan usuari rebi del servidor la frase, es cridarà al mètode change que canviarà el label
+
