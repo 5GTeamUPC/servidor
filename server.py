@@ -31,42 +31,6 @@ class server:
         except:
             return False
 
-#    def ordre(self, vector):
-#        ordre_vector = []
-#        ordre_vector[0] = vector.index(max(vector))
-#        ordre_vector[2] = vector.index(min(vector))
-#        ordre_vector[1] = len(vector) - (ordre_vector[0] + ordre_vector[2])
-#        return ordre_vector
-
-#    def comprovacio_errors(self, frase):
-#        vector = frase.split(" ")
-#        cont = 0
-#        errors = 0
-#        if(len(vector) == len(self.vector_frase)):
-#            for i in vector:
-#                if self.vector_frase[cont] != i:
-#                    errors = errors + 1
-#                cont = cont + 1
-#        else:
-#            errors =  len(vector)
-#        return errors
-
-#    def vector_to_string(self, vector):
-#        frase = ""
-#        for i in vector:
-#            frase = frase + " " + i
-#        return frase
-
-#    def desordenar_vector(self, vector):
-#        vector2 = vector
-#        random.shuffle(vector2)
-#        return vector2
-
-#    def send_frase(self, vector_frase):
-#        vector_desordenat = self.desordenar_vector(vector_frase)
-#        print(vector_desordenat)
-#        self.missatge_broadcast(self.vector_to_string(vector_desordenat))
-
     def send_message(self, sock, message):
         sock.send(message.encode('UTF-8'))
 
@@ -95,11 +59,6 @@ class server:
 #        line = open("BaseDades.txt").read().splitlines()
 #        frase = random.choice(line)
 
-
-#        joc = False
-#        self.i = 0
-#        self.vector_frase = frase.split(" ")
-#        self.frase_vector = frase.split(" ")
         
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #Creem el server_socket
         self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  #Això no sé que fa però mai va de menys
