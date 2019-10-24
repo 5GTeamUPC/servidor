@@ -77,46 +77,18 @@ class server:
             # Miren dels read_sockets aver si algu demana o diu algo!
             for sock in read_sockets:
                 # Nova connexió!
-                if(sock == self.server_socket and joc == False):
+                if(sock == self.server_socket):
                     # Quan rebem data del servidor, significa que una nova connexió s'ha rebut des del server_socket
                     client_sock, client_addr = self.server_socket.accept() #Acceptem la connexió
-                    self.LLISTA_SOCKS.append(client_sock) #Afegim el clint a la llista!
+                    self.LLISTA_SOCKS.append(client_sock) #Afegim el client a la llista!
                     #mapa.setdefault(nick, client_sock)
                     n_sim = n_sim + 1 #incrementem el número de jugadors!
-                    #print(nick)
-                    #self.missatge_broadcast("Nou jugador: %s" % nick)
+                    self.message_broadcast("Hi han " + n_sim + "usuaris connectats")
 
-                if(len(self.LLISTA_SOCKS) == 4 and joc == False):   #Si el número de jugadors és 3 comencem el joc!
-                    time.sleep(1)
-                    self.send_frase(self.vector_frase)
-                    joc = True
                 else:
                     message = self.receive_message(sock)
                     if(message != False):
-                        missatge_nick = message.split("-t")
-                        vector = missatge_nick[0].split(" ")
-                        cont = 0
-                        errors = 0
-                        if (len(vector) == len(self.frase_vector)):
-                            for i in vector:
-                                if self.frase_vector[cont].lower() != i.lower():
-                                    errors = errors + 1
-                                cont = cont + 1
-                        else:
-                            errors = len(vector)
-                        print(errors)
-                        print(int(float(missatge_nick[1])))
-                        suma = errors + int(float(missatge_nick[1]))
-                        self.send_message(sock,"HAS GUANYAT! ETS EL MÉS RÀPID CULEGA!")
-                        self.LLISTA_SOCKS_RETORN[self.pppp] = sock
-                        #incrementem la posició del vector
-                        if(self.pppp == 2):
-                            #self.ordre_guanyador = self.ordre(self.ordre_guanyador)
-                            self.send_message(self.LLISTA_SOCKS_RETORN[0],"HAS GUANYAT! ETS EL MÉS RÀPID CULEGA!")
-                            self.send_message(self.LLISTA_SOCKS_RETORN[1],"HAS PERDUT... PERÒ HAS QUEDAT SEGON JEJ")
-                            self.send_message(self.LLISTA_SOCKS_RETORN[2],"HAS PERDUT")
-                            #self.ordre_guanyador.index(max(self.ordre_guanyador))
-                        self.pppp = self.pppp + 1
+                        self.missatge_broadcast(message)
 if __name__ == "__main__":
     s = server()
     s.run()
