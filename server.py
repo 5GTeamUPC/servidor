@@ -1,17 +1,5 @@
 import socket, select, threading, random, time
 
-"""SELECT: 
-Python’s select() function is a direct interface to the underlying operating system implementation. It monitors sockets,
-open files, and pipes (anything with a fileno() method that returns a valid file descriptor) until they become readable 
-or writable, or a communication error occurs. select() makes it easier to monitor multiple connections at the same time,
-and is more efficient than writing a polling loop in Python using socket timeouts, because the monitoring happens in the
-operating system network layer, instead of the interpreter.
-
-The arguments to select() are three lists containing communication channels to monitor. The first is a list of the 
-objects to be checked for incoming data to be read, the second contains objects that will receive outgoing data when 
-there is room in their buffer, and the third those that may have an error (usually a combination of the input and output
-channel objects). 
-"""
 class server:
     def __init__(self):
         self.errors = []
@@ -45,17 +33,10 @@ class server:
 
     def run(self):
         mapa = {}  #Mapa amb tots els host i clients
-#        num = 0
         n_sim = 0
-#        read_sockets = []
-#        write_sockets = []
-#        error_sockets = []
-#        num_jugadors = 0 #Pel while de rebre la data!
-#        temps = []
-#        jugador_nick = []
-#        numeroerrors = []
-#        fraseclient = []
-#        errors = []
+        read_sockets = []
+        write_sockets = []
+        error_sockets = []
 #        line = open("BaseDades.txt").read().splitlines()
 #        frase = random.choice(line)
 
@@ -73,50 +54,25 @@ class server:
             # data to be read, els altres 2 suda bastant la veritat.
             read_sockets, write_sockets, error_sockets = select.select(self.LLISTA_SOCKS, [], [])
 
-            num = num +1
-            # Miren dels read_sockets aver si algu demana o diu algo!
-            for sock in read_sockets:
-                # Nova connexió!
-                if(sock == self.server_socket and joc == False):
+            for sock in read_sockets: #Miren dels read_sockets aver si algu demana o diu algo!
+                #Nova connexió!
+                if(sock == self.server_socket):
                     # Quan rebem data del servidor, significa que una nova connexió s'ha rebut des del server_socket
                     client_sock, client_addr = self.server_socket.accept() #Acceptem la connexió
-                    self.LLISTA_SOCKS.append(client_sock) #Afegim el clint a la llista!
-                    #mapa.setdefault(nick, client_sock)
+                    self.LLISTA_SOCKS.append(client_sock) #Afegim el client a la llista!
                     n_sim = n_sim + 1 #incrementem el número de jugadors!
-                    #print(nick)
-                    #self.missatge_broadcast("Nou jugador: %s" % nick)
-
-                if(len(self.LLISTA_SOCKS) == 4 and joc == False):   #Si el número de jugadors és 3 comencem el joc!
-                    time.sleep(1)
-                    self.send_frase(self.vector_frase)
-                    joc = True
+                    println(self.LLISTA_SOCKS)
+                    self.missatge_broadcast("nou usuari connectat")
+                #Algun sim7000 vol dir alguna cosa
                 else:
                     message = self.receive_message(sock)
+                    print(message)
                     if(message != False):
-                        missatge_nick = message.split("-t")
-                        vector = missatge_nick[0].split(" ")
-                        cont = 0
-                        errors = 0
-                        if (len(vector) == len(self.frase_vector)):
-                            for i in vector:
-                                if self.frase_vector[cont].lower() != i.lower():
-                                    errors = errors + 1
-                                cont = cont + 1
-                        else:
-                            errors = len(vector)
-                        print(errors)
-                        print(int(float(missatge_nick[1])))
-                        suma = errors + int(float(missatge_nick[1]))
-                        self.send_message(sock,"HAS GUANYAT! ETS EL MÉS RÀPID CULEGA!")
-                        self.LLISTA_SOCKS_RETORN[self.pppp] = sock
-                        #incrementem la posició del vector
-                        if(self.pppp == 2):
-                            #self.ordre_guanyador = self.ordre(self.ordre_guanyador)
-                            self.send_message(self.LLISTA_SOCKS_RETORN[0],"HAS GUANYAT! ETS EL MÉS RÀPID CULEGA!")
-                            self.send_message(self.LLISTA_SOCKS_RETORN[1],"HAS PERDUT... PERÒ HAS QUEDAT SEGON JEJ")
-                            self.send_message(self.LLISTA_SOCKS_RETORN[2],"HAS PERDUT")
-                            #self.ordre_guanyador.index(max(self.ordre_guanyador))
-                        self.pppp = self.pppp + 1
+                        self.missatge_broadcast(message)
+                    if(message = False):
+                        self.LLISTA_SOCKS.remove(sock)
+                        println(self.LLISTA_SOCKS)
+                        println("Socket desconnectat")
 if __name__ == "__main__":
     s = server()
     s.run()
