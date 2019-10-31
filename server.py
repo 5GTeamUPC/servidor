@@ -61,7 +61,7 @@ class server:
                     client_sock, client_addr = self.server_socket.accept() #Acceptem la connexió
                     self.LLISTA_SOCKS.append(client_sock) #Afegim el client a la llista!
                     n_sim = n_sim + 1 #incrementem el número de jugadors!
-                    println(self.LLISTA_SOCKS)
+                    print(self.LLISTA_SOCKS)
                     self.missatge_broadcast("nou usuari connectat")
                 #Algun sim7000 vol dir alguna cosa
                 else:
@@ -69,10 +69,10 @@ class server:
                     print(message)
                     if(message != False):
                         self.missatge_broadcast(message)
-                    if(message = False):
+                    if(message == False):
                         self.LLISTA_SOCKS.remove(sock)
-                        println(self.LLISTA_SOCKS)
-                        println("Socket desconnectat")
+                        print(self.LLISTA_SOCKS)
+                        print("Socket desconnectat")
 if __name__ == "__main__":
     s = server()
     s.run()
