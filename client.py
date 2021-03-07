@@ -21,7 +21,7 @@ class client():
         thread.daemon = True
         thread.start()
         
-    def receive(self, handler):
+    def receive(self):
         while 1:
             LLISTA_SOCKS = [sys.stdin, self.client_sock]
             # Select necessita que se li passin 3 llistes: The first is a list of the objects to be checked for incoming
@@ -31,20 +31,48 @@ class client():
                 # Rebem missatges del servidor!
                 if sock == self.client_sock:
                     data = sock.recv(4096)
-                    if data:
-                        self.t1 = time.time()
-                        GLib.idle_add(handler, data)
+#                    print(data)
 
-    def send(self, missatge):
-        
-        temps_total = time.time() - self.t1
-        self.client_sock.send(missatge)
+    def receive_message(self, socket_client):
+        try:
+            message = socket_client.recv(1024)
+            if not len(message):
+                return False
+            return message.decode('UTF-8')
+        except:
+            return False
+
+    def send_message(self, missatge):
+        self.client_sock.send(missatge.encode('UTF-8'))
        
-    def print(text):
-        print(missatge)
-        self.timeout=GLib.timeout_add(50, self.on_timeout, None)
+
+    def run(self):
+        read_sockets = []
+        write_sockets = []
+        error_sockets = []
+        while 1:
+            self.LLISTA_SOCKS = [sys.stdin, self.client_sock]
+            read_sockets, write_sockets, error_sockets = select.select(self.LLISTA_SOCKS, [], [])
+            for sock in read_sockets:
+            # Rebem missatges del servidor!
+                if sock == self.client_sock:
+                    data = self.receive_message(sock)
+                if not data:
+                    data = 0
+                    #sys.exit()
+#                else:
+#                    print("\n%s" % data)
+#                    print data
+#                    sys.stdout.write(data)
+#                    prompt()
+
+            # Quan el client vol enviar un missatge
+            else:
+                message = sys.stdin.readline()
+                self.send_message(message)
+                print("Missatge enviat!!")
         
 if __name__ == "__main__":
-	self.client = client()
-	self.client.connect()
-	self.client.thread_receive(self.print) #Quan usuari rebi del servidor la frase, es cridarà al mètode change que canviarà el label
+	c = client()
+	c.connect()
+	c.run()
